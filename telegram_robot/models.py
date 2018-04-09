@@ -20,25 +20,16 @@ CONSTR='mysql+pymysql://root:@localhost/telegram_robot?charset=utf8'
 #定义基类
 Base=declarative_base()
 
-# class Wallet(Base):
-#     #显示声明关联的数据表名称
-#     __tablename__='wallet'
-#
-#     #修改数据表配置
-#     __table_args__={
-#         'mysql_engine':'InnoDB',
-#         'mysql_charset':'utf8'
-#     }
-#     #主键Id
-#     #钱包地址：非空
-#     wallet=Column(String(512),nullable=False)
-#     #邀请码:非空
-#     code=Column(String(256),nullable=False)
-#     #外键对象
-#     #jobs=relationship('job')
 
 class Wallet(Base):
     __tablename__ = 'wallet'
+
+    #     #修改数据表配置
+    #     __table_args__={
+    #         'mysql_engine':'InnoDB',
+    #         'mysql_charset':'utf8'
+    #     }
+
     wallet = Column(String(512), primary_key=True, unique=True)
     code = Column(String(256), index=True, unique=True)
 
