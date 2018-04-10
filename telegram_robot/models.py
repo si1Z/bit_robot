@@ -32,6 +32,9 @@ class Wallet(Base):
 
     wallet = Column(String(512), primary_key=True, unique=True)
     code = Column(String(256), index=True, unique=True)
+    user_id = Column(Integer)
+    first_name = Column(String(256))
+    last_name = Column(String(256))
 
     def __repr__(self):
         return '<Wallet %r>' % "wallet"
@@ -43,7 +46,9 @@ db_session=sessionmaker(bind=engine)
 session=db_session()
 
 # wallet=Wallet(wallet='kikay',code=20)
-# #添加
+#添加
+
+
 # session.add(wallet)
 # #提交
 # session.commit()
@@ -51,5 +56,10 @@ session=db_session()
 # session.close()
 
 
-query1=session.query(Wallet)
-print(query1.first().wallet)
+query=session.query(Wallet)
+# print(query1.first().wallet)
+
+
+
+# query.filter(Wallet.wallet=='kikay').update({Wallet.code:'Tom2'})
+# session.commit()

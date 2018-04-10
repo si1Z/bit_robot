@@ -40,7 +40,11 @@ def index():
     db.session.add(wallet)
     db.session.commit()
 
-    return '{}/{}'.format('http://127.0.0.1:5000',wallet_hash)
+    invite_url = '{}/{}'.format('http://127.0.0.1:5000',wallet_hash)
+    join_url = "http://127.0.0.1:5000/join/{a_code}/{b_code}".format(a_code='null', b_code=wallet_hash)
+    return render_template('result.html', invite_code=wallet_hash,invite_url=invite_url, join_url=join_url)
+
+    # return '{}/{}'.format('http://127.0.0.1:5000',wallet_hash)
 
 @app.route('/<a_code>', methods=['GET','POST'])
 def invite(a_code):
@@ -61,12 +65,10 @@ def invite(a_code):
         invite_url = '{}/{}'.format('http://127.0.0.1:5000',b_code)
 
         join_url = "http://127.0.0.1:5000/join/{a_code}/{b_code}".format(a_code=a_code,b_code=b_code)
-        return render_template('result.html',invite_url=invite_url,join_url=join_url)
+        return render_template('result.html',invite_code=b_code,invite_url=invite_url,join_url=join_url)
 
 @app.route('/join/<a_code>/<b_code>', methods=['GET','POST'])
 def join(a_code,b_code):
-
-    print("xxxxxxxxx")
     relation = Relation(a_code=a_code, b_code=b_code)
     db.session.add(relation)
     db.session.commit()
