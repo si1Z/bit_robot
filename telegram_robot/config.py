@@ -8,3 +8,6 @@
 
 
 token='575865674:AAGR_AUZnNXsxVnSy1h6kUxwzDAe7sgAT6A'
+
+#MySQL数据库连接字符串
+CONSTR='mysql+pymysql://root:@localhost/telegram_robot?charset=utf8'

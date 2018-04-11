@@ -14,8 +14,7 @@ from sqlalchemy import text,or_,not_,update
 from sqlalchemy.dialects.mysql import INTEGER
 from sqlalchemy import ForeignKey
 
-#MySQL数据库连接字符串
-CONSTR='mysql+pymysql://root:@localhost/telegram_robot?charset=utf8'
+
 
 #定义基类
 Base=declarative_base()
@@ -35,31 +34,37 @@ class Wallet(Base):
     user_id = Column(Integer)
     first_name = Column(String(256))
     last_name = Column(String(256))
+    count = Column(Integer)
 
     def __repr__(self):
         return '<Wallet %r>' % "wallet"
 
+if __name__ == '__main__':
+    #初始化数据库连接对象
+    engine=create_engine(CONSTR,echo=True)
+    db_session=sessionmaker(bind=engine)
+    session=db_session()
+    query = session.query(Wallet)
 
-#初始化数据库连接对象
-engine=create_engine(CONSTR,echo=True)
-db_session=sessionmaker(bind=engine)
-session=db_session()
-
-# wallet=Wallet(wallet='kikay',code=20)
-#添加
-
-
-# session.add(wallet)
-# #提交
-# session.commit()
-# #关闭
-# session.close()
+    # wallet=Wallet(wallet='kikay',code=20)
+    #添加
 
 
-query=session.query(Wallet)
-# print(query1.first().wallet)
+    # session.add(wallet)
+    # #提交
+    # session.commit()
+    # #关闭
+    # session.close()
 
 
 
-# query.filter(Wallet.wallet=='kikay').update({Wallet.code:'Tom2'})
-# session.commit()
+    # print(query1.first().wallet)
+
+
+
+    # query.filter(Wallet.wallet=='kikay').update({Wallet.code:'Tom2'})
+    # session.commit()
+
+
+    # result = query.filter(Wallet.user_id == 555934414)
+    # print(result[0].count)
