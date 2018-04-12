@@ -69,9 +69,26 @@ def invite(a_code):
 
 @app.route('/join/<a_code>/<b_code>', methods=['GET','POST'])
 def join(a_code,b_code):
+
     relation = Relation(a_code=a_code, b_code=b_code)
     db.session.add(relation)
     db.session.commit()
+
+
+    wallet = Wallet.query.filter_by(code=a_code).first()
+    print(wallet.num)
+    # wallet.update({'count':wallet.num+1})
+    # db.session.commit()
+    # # Wallet
+    # print(wallet)
+    # db.filter(Wallet.code == a_code).update(
+    #     {Wallet.user_id: update.message.from_user.id, Wallet.first_name: update.message.from_user.first_name,
+    #      Wallet.last_name: update.message.from_user.last_name})
+    # session.commit()
+    #
+    # wallet = Wallet(wallet=wallet_address, code=b_code)
+    # db.session.add(wallet)
+    # db.session.commit()
 
     return redirect(telegram_invite_link)
 

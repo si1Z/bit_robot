@@ -12,7 +12,7 @@ class Wallet(db.Model):
     __tablename__ = 'wallet'
     wallet = db.Column(db.String(512), primary_key=True, unique=True)
     code = db.Column(db.String(256), index=True, unique=True)
-
+    num = db.Column(db.INT,default=0)
     def __repr__(self):
         return '<Wallet %r>' % "wallet"
 

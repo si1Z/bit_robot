@@ -34,7 +34,7 @@ class Wallet(Base):
     user_id = Column(Integer)
     first_name = Column(String(256))
     last_name = Column(String(256))
-    count = Column(Integer)
+    num = Column(Integer)
 
     def __repr__(self):
         return '<Wallet %r>' % "wallet"
