@@ -22,7 +22,8 @@ def wallet2hash(wallet_address):
 
 telegram_invite_link = "https://t.me/joinchat/ISLizhCQ4djj5zoeqVgMGw"
 
-
+# base_url = 'http://127.0.0.1:5000'
+base_url = 'http://10.8.233.197:5000'
 
 
 @app.route('/', methods=['GET','POST'])
@@ -40,11 +41,10 @@ def index():
     db.session.add(wallet)
     db.session.commit()
 
-    invite_url = '{}/{}'.format('http://127.0.0.1:5000',wallet_hash)
-    join_url = "http://127.0.0.1:5000/join/{a_code}/{b_code}".format(a_code='null', b_code=wallet_hash)
+    invite_url = '{}/{}'.format(base_url,wallet_hash)
+    join_url = "{}/join/{a_code}/{b_code}".format(base_url,a_code='null', b_code=wallet_hash)
     return render_template('result.html', invite_code=wallet_hash,invite_url=invite_url, join_url=join_url)
 
-    # return '{}/{}'.format('http://127.0.0.1:5000',wallet_hash)
 
 @app.route('/<a_code>', methods=['GET','POST'])
 def invite(a_code):
@@ -62,9 +62,9 @@ def invite(a_code):
         db.session.add(wallet)
         db.session.commit()
 
-        invite_url = '{}/{}'.format('http://127.0.0.1:5000',b_code)
+        invite_url = '{}/{}'.format(base_url,b_code)
 
-        join_url = "http://127.0.0.1:5000/join/{a_code}/{b_code}".format(a_code=a_code,b_code=b_code)
+        join_url = "{}/join/{a_code}/{b_code}".format(base_url,a_code=a_code,b_code=b_code)
         return render_template('result.html',invite_code=b_code,invite_url=invite_url,join_url=join_url)
 
 @app.route('/join/<a_code>/<b_code>', methods=['GET','POST'])
@@ -76,19 +76,12 @@ def join(a_code,b_code):
 
 
     wallet = Wallet.query.filter_by(code=a_code).first()
-    print(wallet.num)
-    # wallet.update({'count':wallet.num+1})
-    # db.session.commit()
-    # # Wallet
-    # print(wallet)
-    # db.filter(Wallet.code == a_code).update(
-    #     {Wallet.user_id: update.message.from_user.id, Wallet.first_name: update.message.from_user.first_name,
-    #      Wallet.last_name: update.message.from_user.last_name})
-    # session.commit()
-    #
-    # wallet = Wallet(wallet=wallet_address, code=b_code)
-    # db.session.add(wallet)
-    # db.session.commit()
+    wallet.num = wallet.num + 1
+    db.session.commit()
+
 
     return redirect(telegram_invite_link)
 
+
+
+#http://127.0.0.1:5000/join/74b87337454200d4d33f80c4663dc5e5/fe0c6eaa921f674fbb05c763ee63eb42

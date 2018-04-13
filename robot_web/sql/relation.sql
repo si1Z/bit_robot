@@ -11,7 +11,7 @@
  Target Server Version : 50721
  File Encoding         : utf-8
 
- Date: 04/08/2018 19:10:24 PM
+ Date: 04/13/2018 17:05:58 PM
 */
 
 SET NAMES utf8;
@@ -26,6 +26,6 @@ CREATE TABLE `relation` (
   `b_code` varchar(256) DEFAULT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS = 1;
