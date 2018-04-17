@@ -9,19 +9,8 @@
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-
-from models import Wallet
-from config import token,CONSTR
-
-
-#初始化数据库连接对象
-engine=create_engine(CONSTR,echo=True)
-db_session=sessionmaker(bind=engine)
-session=db_session()
-query1 = session.query(Wallet)
-
+from config import token
+from controller import controller_query,controller_bind
 
 
 updater = Updater(token=token,request_kwargs={'proxy_url':'socks5://127.0.0.1:1088'})
@@ -29,26 +18,19 @@ dispatcher = updater.dispatcher
 
 #命令 /bind   绑定
 def bind(bot, update,args):
-
     code = args[0]
+    user_id = update.message.from_user.id
+    first_name = update.message.from_user.first_name
+    last_name = update.message.from_user.last_name
 
 
-    # print(args)
-    # print(update.message.from_user)
-    # print(update.message.from_user.id)
-    # print(update.message.from_user.first_name)
-    # print(update.message.from_user.last_name)
-    # print(update.message['from']['id'])
-    # print(update.message['from']['first_name'])
     if args == []:
         response_text = '请输入命令和邀请码！'
     else:
-        query1.filter(Wallet.code == code).update(
-            {Wallet.user_id: update.message.from_user.id, Wallet.first_name: update.message.from_user.first_name,
-             Wallet.last_name: update.message.from_user.last_name})
-        session.commit()
+        controller_bind(code,user_id,first_name,last_name)
         response_text = '绑定成功！'
     bot.send_message(chat_id=update.message.chat_id, text=response_text)
+
 bind_handler = CommandHandler('bind', bind, pass_args=True)
 dispatcher.add_handler(bind_handler)
 
@@ -56,49 +38,17 @@ dispatcher.add_handler(bind_handler)
 #命令 /query   查询
 def query(bot, update,args):
     code = args[0]
-
+    user_id = update.message.from_user.id
     if args == []:
         response_text = '请输入命令和邀请码！'
     else:
-        print(code)
-        result = query1.filter(Wallet.code == code,Wallet.user_id == update.message.from_user.id)
-        response_text = result[0].num
+
+        response_text = controller_query(code,user_id)
 
     update.message.reply_text(response_text)
-    # bot.send_message(chat_id=update.message.chat_id, text=response_text)
+
 query_handler = CommandHandler('query', query, pass_args=True)
 dispatcher.add_handler(query_handler)
-
-
-# #命令 /query   查询
-# def query(bot, update,args):
-#
-#     code = args[0]
-#
-#
-#     # print(args)
-#     # print(update.message.from_user)
-#     # print(update.message.from_user.id)
-#     # print(update.message.from_user.first_name)
-#     # print(update.message.from_user.last_name)
-#     # print(update.message['from']['id'])
-#     # print(update.message['from']['first_name'])
-#     if args == []:
-#         response_text = '请输入命令和邀请码！'
-#     else:
-#         print(code)
-#         query.filter(Wallet.code == code).update(
-#             {Wallet.user_id: update.message.from_user.id, Wallet.first_name: update.message.from_user.first_name,
-#              Wallet.last_name: update.message.from_user.last_name})
-#         session.commit()
-#         response_text = '绑定成功！'
-#     bot.send_message(chat_id=update.message.chat_id, text=response_text)
-# bind_handler = CommandHandler('query', query, pass_args=True)
-# dispatcher.add_handler(bind_handler)
-
-
-
-
 
 
 updater.start_polling()
